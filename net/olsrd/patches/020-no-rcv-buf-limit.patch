@@ -1,0 +1,20 @@
+--- a/src/unix/ifnet.c
++++ b/src/unix/ifnet.c
+@@ -721,7 +721,7 @@
+      *on what interface the message is transmitted
+      */
+ 
+-    ifs.olsr_socket = getsocket(BUFSPACE, &ifs);
++    ifs.olsr_socket = getsocket(0, &ifs);
+     ifs.olsr_raw_socket = getrawsocket(&ifs);
+     ifs.send_socket = getsocket(0, &ifs);
+ 
+@@ -758,7 +758,7 @@
+      *on what interface the message is transmitted
+      */
+ 
+-    ifs.olsr_socket = getsocket6(BUFSPACE, &ifs);
++    ifs.olsr_socket = getsocket6(0, &ifs);
+     ifs.send_socket = getsocket6(0, &ifs);
+ 
+     if (ifs.olsr_socket < 0) {
