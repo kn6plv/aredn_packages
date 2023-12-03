@@ -171,12 +171,6 @@ olsrd_write_plparam() {
 		[ -z "$ifname" ] || value=$ifname
 	fi
 
-	if [ "$option" = "sighupPidFile" ]; then
-		option="sighup-pid-file"
-	fi
-	if [ "$option" = "nameChangeScript" ]; then
-		option="name-change-script"
-	fi
 	option=$(echo $option | sed -r "s/^(\d+)-(\d+)-(\d+)-(\d+)$/\1.\2.\3.\4/")
 
 	echo -n "${N}${param}PlParam \"$option\" \"$value\""
