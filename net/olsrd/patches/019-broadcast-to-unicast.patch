@@ -173,7 +173,7 @@ index 22a0fa16..689db076 100644
 +  struct sockaddr_ll socket_address;
 +  struct pseudo_header pseudo;
 +  FILE *f;
-+  char buf[32];
++  char macbuf[32];
 +
 +  struct ether_header *ether_hdr = (struct ether_header *)pkt;
 +  struct iphdr *ip_hdr = (struct iphdr *)(pkt + sizeof(struct ether_header));
@@ -249,8 +249,8 @@ index 22a0fa16..689db076 100644
 +    return sendto(s, pkt, sizeof(struct ether_header) + sizeof(struct iphdr) + sizeof(struct udphdr) + len, 0, (struct sockaddr*)&socket_address, sizeof(struct sockaddr_ll));
 +  }
 +  /* Send the packet to each peer individually */
-+  while (fgets(buf, sizeof(buf), f) != NULL) {
-+    if (sscanf(buf, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx", &dst_mac[0], &dst_mac[1], &dst_mac[2], &dst_mac[3], &dst_mac[4], &dst_mac[5]) == 6) {
++  while (fgets(macbuf, sizeof(macbuf), f) != NULL) {
++    if (sscanf(macbuf, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx", &dst_mac[0], &dst_mac[1], &dst_mac[2], &dst_mac[3], &dst_mac[4], &dst_mac[5]) == 6) {
 +      socket_address.sll_addr[0] = ether_hdr->ether_dhost[0] = dst_mac[0];
 +      socket_address.sll_addr[1] = ether_hdr->ether_dhost[1] = dst_mac[1];
 +      socket_address.sll_addr[2] = ether_hdr->ether_dhost[2] = dst_mac[2];
