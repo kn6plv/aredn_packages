@@ -28,7 +28,7 @@ index f853bf64..f0e5c662 100644
    char *int_name;                      /* from kernel if structure */
    uint16_t olsr_seqnum;                /* Olsr message seqno */
 +  uint8_t mac[6];                      /* Mac address of interface */
-+  char stations[60];                   /* Path to peer file > strlen("/sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations") */
++  char stations[60];                   /* Path to peer file > strlen("/tmp/lqm.phy%d.macs") */
  
    /* Periodic message generation timers */
    struct timer_entry *hello_gen_timer;
@@ -343,7 +343,7 @@ index c286289b..a39653a4 100644
  void
  check_interface_updates(void *foo __attribute__ ((unused)))
  {
-@@ -222,6 +225,24 @@ chk_if_changed(struct olsr_if *iface)
+@@ -222,6 +225,20 @@ chk_if_changed(struct olsr_if *iface)
    /* Get interface index */
    ifp->if_index = if_nametoindex(ifr.ifr_name);
  
@@ -357,12 +357,8 @@ index c286289b..a39653a4 100644
 +  /* Find path to stations */
 +  ifp->stations[0] = 0;
 +  if (strcmp(ifr.ifr_name, "wlan0") == 0 || strcmp(ifr.ifr_name, "wlan1") == 0) {
-+    struct stat stat_buf;
 +    int phyid = ifr.ifr_name[4] - '0';
 +    sprintf(ifp->stations, PATH_STATIONS_PATTERN, phyid);
-+    if (stat(ifp->stations, &stat_buf) != 0) {
-+      ifp->stations[0] = 0;
-+    }
 +  }
 +
    /*
