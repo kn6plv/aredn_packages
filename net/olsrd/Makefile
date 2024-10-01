@@ -38,7 +38,6 @@ endef
 
 define Package/olsrd/conffiles
 /etc/config/olsrd
-/etc/config/olsrd6
 endef
 
 define Package/olsrd-mod-arprefresh
