@@ -6,7 +6,7 @@ PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-FIRMWARE_ROOT = ./files/ath10k-firmware-38eeda3ae6f90fde5546bdd48ee4ff3090f238c0/ath10k
+FIRMWARE_ROOT = ./files/ath10k
 
 define Package/ath10k-firmware-default-ct
   SECTION:=firmware
