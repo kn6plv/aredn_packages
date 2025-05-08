@@ -562,9 +562,13 @@ parse_packet(const unsigned char *from, struct interface *ifp,
             }
             /* If we receive a hello from a neighbor with a revoked route, trigger an update as if this was a new neighbot */
             if (neigh->txcost >= INFINITY) {
-                do_debugf(0, "Detected HELLO from neighbor with txcost of INFINITY - 1\n");
-                neigh->txcost = neighbour_rxcost(neigh);
-                update_neighbour_metric(neigh, 1);
+                do_debugf(0, "Detected HELLO from neighbor with txcost of INFINITY - 2\n");
+                static int infinity_neigh = 0;
+                infinity_neigh++;
+                if (infinity_neigh > 10) {
+                    do_debugf(0, "FATAL: Too many infinite neighbors - exit to force restart.\n");
+                    exit(1);
+                }
             }
         } else if(type == MESSAGE_IHU) {
             unsigned short txcost, interval;
