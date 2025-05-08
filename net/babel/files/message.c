@@ -567,6 +567,11 @@ parse_packet(const unsigned char *from, struct interface *ifp,
                 infinity_neigh++;
                 if (infinity_neigh > 10) {
                     do_debugf(0, "FATAL: Too many infinite neighbors - exit to force restart.\n");
+                    if(local_server_path) {
+                        unlink(local_server_path);
+                    }
+                    if(pidfile)
+                        unlink(pidfile);
                     exit(1);
                 }
             }
