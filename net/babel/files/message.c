@@ -563,6 +563,7 @@ parse_packet(const unsigned char *from, struct interface *ifp,
             /* If we receive a hello from a neighbor with a revoked route, trigger an update as if this was a new neighbot */
             if (neigh->txcost >= INFINITY) {
                 do_debugf(0, "Detected HELLO from neighbor with txcost of INFINITY\n");
+                neigh->hello.seqno = neigh->uhello.seqno = -1;
                 set_timeout(&ifp->update_timeout, ifp->hello_interval);
             }
         } else if(type == MESSAGE_IHU) {
