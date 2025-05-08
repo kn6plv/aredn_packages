@@ -562,18 +562,7 @@ parse_packet(const unsigned char *from, struct interface *ifp,
             }
             /* If we receive a hello from a neighbor with a revoked route, trigger an update as if this was a new neighbot */
             if (neigh->txcost >= INFINITY) {
-                do_debugf(0, "Detected HELLO from neighbor with txcost of INFINITY - 2\n");
-                static int infinity_neigh = 0;
-                infinity_neigh++;
-                if (infinity_neigh > 10) {
-                    do_debugf(0, "FATAL: Too many infinite neighbors - exit to force restart.\n");
-                    if(local_server_path) {
-                        unlink(local_server_path);
-                    }
-                    if(pidfile)
-                        unlink(pidfile);
-                    exit(1);
-                }
+                do_debugf(0, "Detected HELLO from neighbor with txcost of INFINITY - 3\n");
             }
         } else if(type == MESSAGE_IHU) {
             unsigned short txcost, interval;
@@ -1808,7 +1797,7 @@ send_ihu(struct neighbour *neigh, struct interface *ifp)
     rxcost = neighbour_rxcost(neigh);
     interval = (ifp->hello_interval * 3 + 9) / 10;
 
-    debugf("Sending ihu %d on %s to %s.\n",
+    do_debugf(0, "Sending ihu %d on %s to %s.\n",
            rxcost,
            neigh->ifp->name,
            format_address(neigh->address));
@@ -1816,13 +1805,13 @@ send_ihu(struct neighbour *neigh, struct interface *ifp)
     /* If we already have unicast data buffered for this peer, piggyback
        the IHU.  Only do that if RFC 6126 compatibility is disabled, since
        doing that might require sending an unscheduled unicast Hello. */
-    //unicast = !!(ifp->flags & IF_UNICAST) ||
-    //    (neigh->buf.len > 0 && !(ifp->flags & IF_RFC6126));
+    unicast = !!(ifp->flags & IF_UNICAST) ||
+        (neigh->buf.len > 0 && !(ifp->flags & IF_RFC6126));
 
     // Always unicast because these packets are directed at a specific neighbor and
     // multicasting them is just pointlessly annoying everyone and forcing them to be
     // mostly ignored.
-    unicast = 1;
+    //unicast = 1;
 
     if(!!(ifp->flags & IF_TIMESTAMPS) != 0 && neigh->hello_send_us &&
        /* Checks whether the RTT data is not too old to be sent. */
