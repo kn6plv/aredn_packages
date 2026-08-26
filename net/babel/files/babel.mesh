@@ -28,9 +28,6 @@ config tunnel 'tunnel'
 config xlink 'xlink'
         option rxcost '150'
 
-config lanradio 'lan_radio'
-        option rxcost '256'
-
 config supernode 'supernode'
         option rxcost '206'
         option hello_interval '10'
